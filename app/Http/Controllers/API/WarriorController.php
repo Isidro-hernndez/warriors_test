@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Warrior;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class WarriorController extends Controller
 {
@@ -14,17 +15,13 @@ class WarriorController extends Controller
      */
     public function index()
     {
-        return view('warriors.index');
-    }
+        $warriors = Warrior::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json([
+            'warriors' => $warriors,
+            'status' => 'success',
+            'desc' => 'Lista de guerrerors'
+        ]);
     }
 
     /**
@@ -45,17 +42,6 @@ class WarriorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Warrior $warrior)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Warrior  $warrior
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Warrior $warrior)
     {
         //
     }
