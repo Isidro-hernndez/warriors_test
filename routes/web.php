@@ -24,3 +24,7 @@ Route::get('/warriors', 'WarriorController@index')->name('warriors.index');
 Route::get('/admin', function () {
     return view('warriors.admin');
 })->name('warriors.admin');
+
+Route::get('/test', function (){
+    return view('test');
+});
