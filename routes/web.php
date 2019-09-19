@@ -20,3 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/warriors', 'WarriorController@index')->name('warriors.index');
+
+Route::get('/admin', function () {
+    return view('warriors.admin');
+})->name('warriors.admin');
