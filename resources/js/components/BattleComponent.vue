@@ -1,7 +1,8 @@
 <template>
     <div class="container">
+        <pre>{{user}}</pre>
         <div class="container-fluid">
-                
+                <button class="btn btn-success" @click="login">clickme</button>
                 <select-component v-if="showModal" @close="showModal = false" :warriors="warriors" @select-warrior="selectWarrior"></select-component>
         <div class="row justify-content-md-center">
             <!-- Start first warrior -->
@@ -81,6 +82,7 @@
             'select-component' : selectComponent
         },
         data: () => ({
+            user: {},
             showModal: false,
             warriorUsed: {
                 id: 0,
@@ -113,6 +115,22 @@
         watch: {
         },
         methods: {
+            login(){
+                let urlTest = 'api/apiLogin';
+                axios.post(urlTest, {email : 'example@example.com', password: '12345678'}).then((response) =>{
+                    console.log(response);
+                    // this.user = response.data.user;
+                    localStorage.setItem('user', JSON.stringify(response.data.user));
+                    // this.warriors = response.data.warriors;
+                })
+            },
+            test(){
+                let urlTest = '/api/user?api_token=' + this.user.api_token;
+                axios.get(urlTest).then((response) =>{
+                    console.log(response);
+                    // this.warriors = response.data.warriors;
+                })
+            },
             fight(used, fought){
                 if(used.id != 0){
                     let battle = {
@@ -147,7 +165,7 @@
                         type: battle.type,
                         confirmButtonText: 'Ok'
                     }).then((success) => {
-                        var urlBattleCreate = 'api/battles';
+                        var urlBattleCreate = 'api/battles?api_token=' + this.user.api_token;
                         axios.post(urlBattleCreate, battle).then((response) => {
                             console.log(response);
                         })
@@ -190,6 +208,7 @@
         },
         created () {
         // this.initialize()
+            this.user = JSON.parse(localStorage.getItem('user'));
         },
         mounted() {
             console.log('montado perro');

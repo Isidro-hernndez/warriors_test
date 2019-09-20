@@ -16,30 +16,34 @@ class BattleController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
-    }
-
-    public function apiLogin(Request $request){
-        // $credentials = $request->only('email', 'password');
-        $email = $request->email;
-        $password = $request->password;
-        dd(Auth::check(['email' => $email, 'password' => $password]));
-
-        if (Auth::attempt(['email' => $email, 'password', $password])) {
-            dd('holi');
-            // Authentication passed...
-            // return redirect()->intended('dashboard');
-            return response()->json([
-                'user' => Auth::once($credentials),
-                'status' => 'success',
-                'desc' => 'Usuario loggeado'
-            ]);
-        }
+        $this->middleware('auth:api');
     }
 
     public function index()
     {
         //
+    }
+
+    public function getAll(){
+        $user = Auth::user();
+        $battles = Battle::where('user_id', $user->id)->get();
+        $total_win = $battles->where('result', 'win');
+        $total_loose = $battles->where('result', 'loose');
+        $total_tie = $battles->where('result', 'tie');
+        $best_warrior = $total_win->groupBy('warrior_used')->max();
+        $worst_warrior = $total_loose->groupBy('warrior_used')->max();
+
+        return response()->json([
+            'battles' => $battles,
+            'win' => $total_win,
+            'loose' => $total_loose,
+            'tie' => $total_tie,
+            'best_warrior' => $best_warrior,
+            'worst_warrior' => $worst_warrior,
+            'status' => 'success',
+            'desc' => 'Batalla guardada'
+        ]);
+
     }
 
     /**
@@ -77,7 +81,7 @@ class BattleController extends Controller
             ]);
         }else{
             return response()->json([
-                'battle' => $request,
+                'battle' => $user,
                 'status' => 'error',
                 'desc' => 'Batalla no guardada'
             ]);
