@@ -25,7 +25,7 @@ class CreateBattlesTable extends Migration
             $table->unsignedBigInteger('warrior_fought');
             $table->foreign('warrior_fought')->references('id')->on('warriors');
 
-            $table->boolean('victory')->default(false);
+            $table->enum('result', ['win', 'loose', 'tie'])->default('win');
 
             $table->datetime('date');
             // $table->timestamps();
