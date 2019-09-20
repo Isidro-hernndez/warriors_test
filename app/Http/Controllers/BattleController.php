@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Battle;
+use App\Warrior;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,28 +17,32 @@ class BattleController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        // $this->middleware('auth:api');
     }
 
     public function index()
     {
-        //
+        return view('warriors.admin');
     }
 
     public function getAll(){
         $user = Auth::user();
-        $battles = Battle::where('user_id', $user->id)->get();
-        $total_win = $battles->where('result', 'win');
-        $total_loose = $battles->where('result', 'loose');
-        $total_tie = $battles->where('result', 'tie');
-        $best_warrior = $total_win->groupBy('warrior_used')->max();
-        $worst_warrior = $total_loose->groupBy('warrior_used')->max();
+        $battles = Battle::select('battles.*', 'warriors_useds.name as used_name', 'warriors_foughts.name as fought_name')->where('user_id', $user->id)
+            ->orderBy('date', 'DESC')
+            ->join('warriors as warriors_useds', 'battles.warrior_used', '=', 'warriors_useds.id')
+            ->join('warriors as warriors_foughts', 'battles.warrior_fought', '=', 'warriors_foughts.id');
 
+        $total_win = $battles->get()->where('result', 'win');
+        $total_loose = $battles->get()->where('result', 'loose');
+        $total_tie = $battles->get()->where('result', 'tie');
+        $best_warrior = Warrior::find($total_win->groupBy('warrior_used')->max()->first()->warrior_used);
+        $worst_warrior = Warrior::find($total_loose->groupBy('warrior_used')->max()->first()->warrior_used);
+        // dd($total_loose->values());
         return response()->json([
-            'battles' => $battles,
-            'win' => $total_win,
-            'loose' => $total_loose,
-            'tie' => $total_tie,
+            'battles' => $battles->get(),
+            'win' => $total_win->values(),
+            'loose' => $total_loose->values(),
+            'tie' => $total_tie->values(),
             'best_warrior' => $best_warrior,
             'worst_warrior' => $worst_warrior,
             'status' => 'success',

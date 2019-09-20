@@ -48,4 +48,34 @@ class ApiTokenController extends Controller
         ]);
         
     }
+
+    public function logout(Request $request){
+        $user = Auth::user();
+
+        $status = 'error';
+        $desc = 'problema al cerrar sesión';
+        if($user){
+            // $this->guard()->logout();
+            // dd($request);
+            // return response()->json(['user' => $user->session()]);
+            // $request->session()->invalidate();
+
+            // $user->forceFill([
+            //     'api_token' => hash('sha256', $token),
+            // ])->save();
+
+            // $user = Auth::logout();
+            // dd($user);
+            $status = 'success';
+            $desc = 'Usuario desloggeado';
+            // $user = LoginController::logout();
+        }
+        return response()->json([
+            'user' => $user,
+            'status' => $status,
+            'desc' => $desc
+        ]);
+    }
+
+    
 }

@@ -23,6 +23,9 @@ window.Vue = require('vue');
 
 Vue.component('battle-component', require('./components/BattleComponent.vue').default);
 Vue.component('dashboard-component', require('./components/DashboardComponent.vue').default);
+Vue.component('login-component', require('./components/LoginComponent.vue').default);
+Vue.component('navbar-component', require('./components/NavbarComponent.vue').default);
+Vue.component('register-component', require('./components/RegisterComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

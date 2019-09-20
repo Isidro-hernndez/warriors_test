@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
-        <pre>{{user}}</pre>
+    <div class="">
+        <navbar-component :show="!load"></navbar-component>
         <div class="container-fluid">
-                <button class="btn btn-success" @click="login">clickme</button>
+                
                 <select-component v-if="showModal" @close="showModal = false" :warriors="warriors" @select-warrior="selectWarrior"></select-component>
         <div class="row justify-content-md-center">
             <!-- Start first warrior -->
@@ -75,11 +75,15 @@
     import Swal from 'sweetalert2';
 
     import selectComponent from './SelectComponent.vue';
-
+    import navBarComponent from './NavbarComponent.vue';
     
     export default {
+        props:{
+            load: Boolean
+        },
         components:{
-            'select-component' : selectComponent
+            'select-component' : selectComponent,
+            'navbar-component' : navBarComponent
         },
         data: () => ({
             user: {},
@@ -117,7 +121,7 @@
         methods: {
             login(){
                 let urlTest = 'api/apiLogin';
-                axios.post(urlTest, {email : 'example@example.com', password: '12345678'}).then((response) =>{
+                axios.post(urlTest, {email : 'isihergre@gmail.com', password: '12345678'}).then((response) =>{
                     console.log(response);
                     // this.user = response.data.user;
                     localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -211,7 +215,7 @@
             this.user = JSON.parse(localStorage.getItem('user'));
         },
         mounted() {
-            console.log('montado perro');
+            console.log(window.Laravel);
             this.getWarriors();
         }
     }
