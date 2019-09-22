@@ -129,8 +129,9 @@
                 })
             },
             test(){
-                let urlTest = '/api/user?api_token=' + this.user.api_token;
-                axios.get(urlTest).then((response) =>{
+                // let urlTest = '/api/user?api_token=' + this.user.api_token;
+                let urlTest = '/api/user'
+                axios.get(urlTest, {api_token: this.user.api_token}).then((response) =>{
                     console.log(response);
                     // this.warriors = response.data.warriors;
                 })

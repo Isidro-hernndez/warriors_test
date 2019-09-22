@@ -1,6 +1,6 @@
 <template>
     <div class="">
-            <navbar-component user="user" show="true"></navbar-component>
+            <navbar-component :user="user" :show="true"></navbar-component>
         <div class="row">
             <nav class="col-md-2  d-md-block bg-light sidebar">
                 <div class="nav nav-tabs sidebar-sticky" id="nav-tab" role="tablist">
@@ -241,7 +241,8 @@
             },
             getData(){
                 let urlData = 'api/battles/getAll?api_token=' + this.user.api_token;
-                axios.get(urlData).then((response) => {
+                // let urlData = 'api/battles/getAll';
+                axios.get(urlData, ).then((response) => {
                     console.log(response);
                     this.battles = response.data.battles;
                     this.win = response.data.win;

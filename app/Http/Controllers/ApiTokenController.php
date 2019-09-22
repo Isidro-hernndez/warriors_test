@@ -5,10 +5,33 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\CreateUserApiRequest;
 
 
 class ApiTokenController extends Controller
 {
+    public function register(CreateUserApiRequest $request){
+        $status = true;
+        $desc = 'Usuario registrado';
+        // return response()->json($request);
+        $token = Str::random(60);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'api_token' => hash('sha256', $token),
+        ]);
+
+        return response()->json([
+            'user' => $user,
+            'status' => $status,
+            'desc' => $desc
+        ]);
+
+
+    }
+
     public function update(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -60,9 +83,9 @@ class ApiTokenController extends Controller
             // return response()->json(['user' => $user->session()]);
             // $request->session()->invalidate();
 
-            // $user->forceFill([
-            //     'api_token' => hash('sha256', $token),
-            // ])->save();
+            $user->forceFill([
+                'api_token' => $token = Str::random(60),
+            ])->save();
 
             // $user = Auth::logout();
             // dd($user);

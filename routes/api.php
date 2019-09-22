@@ -17,6 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('/apiLogin', 'ApiTokenController@update')->name('apiLogin');
+Route::post('/apiRegister', 'ApiTokenController@register')->name('apiRegister');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('battles/getAll', 'BattleController@getAll');  
